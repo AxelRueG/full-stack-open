@@ -1,0 +1,13 @@
+note over browser:
+the user creates a new note 
+and clicks the submit button
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+server-->browser: { content: "new note 2", date: "2022-01-29" }
+
+note over browser:
+browser executes the event handler
+that adding new note to notes list 
+and renders all notes to display
+end note
