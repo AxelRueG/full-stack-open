@@ -9,6 +9,40 @@ const Finder = ({ finder, handleChange }) => {
 	);
 };
 
+const Weather = ({ capital }) => {
+	const [data, setData] = useState({
+		location: { name: '' },
+		current: {
+			temperature: '',
+			weather_icons: '',
+			wind_dir: '',
+			wind_speed: '',
+		},
+	});
+
+	useEffect(() => {
+		axios
+			.get(
+				`http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${capital}`
+			)
+			.then((response) => setData(response.data));
+	}, []);
+
+	return (
+		<div>
+			<h2>Weather in {data.location.name}</h2>
+			<p>
+				<strong>temperature:</strong> {data.current.temperature} celcius
+			</p>
+			<img src={data.current.weather_icons[0]} tag="weather icon"></img>
+			<p>
+				<strong>wind: </strong>
+				{data.current.wind_speed} mph direccion {data.current.wind_dir}
+			</p>
+		</div>
+	);
+};
+
 const Countrie = ({ countrie }) => {
 	return (
 		<div>
@@ -22,6 +56,7 @@ const Countrie = ({ countrie }) => {
 				))}
 			</ul>
 			<img src={countrie.flags.png}></img>
+			<Weather capital={countrie.capital[0]} />
 		</div>
 	);
 };
