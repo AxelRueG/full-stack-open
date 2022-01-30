@@ -9,16 +9,6 @@ const Finder = ({ finder, handleChange }) => {
 	);
 };
 
-const CountriesList = ({ countries }) => {
-	return (
-		<div>
-			{countries.map((countrie) => (
-				<p key={countrie.name.common}>{countrie.name.common}</p>
-			))}
-		</div>
-	);
-};
-
 const Countrie = ({ countrie }) => {
 	return (
 		<div>
@@ -32,6 +22,34 @@ const Countrie = ({ countrie }) => {
 				))}
 			</ul>
 			<img src={countrie.flags.png}></img>
+		</div>
+	);
+};
+
+const CountriLi = ({ countrie }) => {
+	const [showStatus, setShowStatus] = useState(false);
+
+	const handleClick = () => setShowStatus(!showStatus);
+
+	return showStatus ? (
+		<>
+			<Countrie countrie={countrie} />
+			<button onClick={handleClick}>hide</button>
+		</>
+	) : (
+		<div>
+			<p>{countrie.name.common}</p>
+			<button onClick={handleClick}>show</button>
+		</div>
+	);
+};
+
+const CountriesList = ({ countries }) => {
+	return (
+		<div>
+			{countries.map((countrie) => (
+				<CountriLi key={countrie.name.common} countrie={countrie} />
+			))}
 		</div>
 	);
 };
