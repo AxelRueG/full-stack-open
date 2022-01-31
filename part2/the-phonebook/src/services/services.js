@@ -10,4 +10,8 @@ const postPerson = (contact) => {
 	return axios.post('http://localhost:3001/persons', contact);
 };
 
-export default { getPersons, postPerson };
+const deletePerson = (id) => {
+	return axios.delete(`http://localhost:3001/persons/${id}`);
+};
+
+export default { getPersons, postPerson, deletePerson };

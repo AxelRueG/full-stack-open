@@ -35,6 +35,12 @@ const App = () => {
 		setNewNumber('');
 	};
 
+	const handleDelete = (id) => {
+		Service.deletePerson(id).then(() =>
+			setPersons(persons.filter((elem) => elem.id !== id))
+		);
+	};
+
 	const handleFilter = (e) => setSearch(e.target.value);
 
 	return (
@@ -48,7 +54,7 @@ const App = () => {
 				handleNumber={handleChangeNumber}
 				handleSubmit={handleSubmit}
 			/>
-			<Contacts persons={persons} search={search} />
+			<Contacts persons={persons} search={search} handleDelete={handleDelete} />
 		</div>
 	);
 };
