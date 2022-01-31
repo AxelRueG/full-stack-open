@@ -1,27 +1,27 @@
 import { useEffect } from 'react';
 
 const messageStyle = {
-	border: '2px solid green',
+	border: '2px solid red',
+	color: 'red',
 	borderRadius: '10px',
-	color: 'green',
 	marginTop: '10px',
 	padding: '5px',
 	backgroundColor: '#aaa',
 };
 
-const MessageAdded = ({ contact, showMessage, message }) => {
+const MessageError = ({ name, handleError }) => {
 	useEffect(() => {
-		const showTime = setTimeout(() => showMessage(), 5000);
+		const showTime = setTimeout(() => handleError(), 5000);
 		return () => clearTimeout(showTime);
-	}, [showMessage]);
+	}, [handleError]);
 
 	return (
 		<div style={messageStyle}>
 			<h3 style={{ padding: 0, margin: 0 }}>
-				{message} {contact.name}
+				Information of {name} has already been removed from server
 			</h3>
 		</div>
 	);
 };
 
-export default MessageAdded;
+export default MessageError;
