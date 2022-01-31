@@ -21,8 +21,17 @@ const App = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		if (persons.find((elem) => elem.name === newName)) {
-			alert(`${newName} is already added to phonebook`);
+		const existContact = persons.find((elem) => elem.name === newName);
+		if (existContact) {
+			if (window.confirm(`${newName} is already added to phonebook`)) {
+				const contactUpdate = { ...existContact, number: newNumber };
+				Service.updatePerson(existContact.id, contactUpdate)
+					.then((response) => response.data)
+					.then((response) => {
+						const rest = persons.filter((elem) => elem.id !== existContact.id);
+						setPersons(rest.concat(response));
+					});
+			}
 		} else {
 			Service.postPerson({
 				name: newName,
