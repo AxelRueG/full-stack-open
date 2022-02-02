@@ -17,7 +17,7 @@ const App = () => {
 	});
 	const [errorMessage, setErrorMessage] = useState({
 		status: false,
-		id: undefined,
+		message: undefined,
 	});
 
 	useEffect(() => {
@@ -33,9 +33,8 @@ const App = () => {
 		e.preventDefault();
 		const existContact = persons.find((elem) => elem.name === newName);
 
-		console.log(existContact);
-
 		if (existContact) {
+			// confirm if the user will update the phone number
 			if (window.confirm(`${newName} is already added to phonebook`)) {
 				const contactUpdate = { ...existContact, number: newNumber };
 
@@ -46,9 +45,12 @@ const App = () => {
 						setPersons(rest.concat(response));
 						setShowMessage({ status: true, message: 'Update number from ' });
 					})
-					.catch(() => setErrorMessage({ status: true, id: newName }));
+					.catch((e) =>
+						setErrorMessage({ status: true, message: e.response.data.error })
+					);
 			}
 		} else {
+			// Create a new person
 			Service.postPerson({
 				name: newName,
 				number: newNumber,
@@ -57,7 +59,10 @@ const App = () => {
 				.then((response) => {
 					setPersons(persons.concat(response));
 					setShowMessage({ status: true, message: 'Added ' });
-				});
+				})
+				.catch((e) =>
+					setErrorMessage({ status: true, message: e.response.data.error })
+				);
 		}
 		setNewName('');
 		setNewNumber('');
@@ -66,13 +71,12 @@ const App = () => {
 	const handleDelete = (id) => {
 		Service.deletePerson(id)
 			.then(() => setPersons(persons.filter((elem) => elem.id !== id)))
-			.catch(() => {
-				const p = persons.filter((elem) => elem.id === id);
+			.catch((e) =>
 				setErrorMessage({
 					status: true,
-					id: p[0].name,
-				});
-			});
+					message: e.response.data.error,
+				})
+			);
 	};
 
 	const handleFilter = (e) => setSearch(e.target.value);
@@ -80,7 +84,7 @@ const App = () => {
 	const handleShowMessage = () =>
 		setShowMessage({ status: false, message: '' });
 
-	const handleError = () => setErrorMessage({ status: false, id: undefined });
+	const handleError = () => setErrorMessage({ status: false, message: '' });
 
 	return (
 		<div>
@@ -96,7 +100,10 @@ const App = () => {
 				<></>
 			)}
 			{errorMessage.status ? (
-				<MessageError name={errorMessage.id} handleError={handleError} />
+				<MessageError
+					message={errorMessage.message}
+					handleError={handleError}
+				/>
 			) : (
 				<></>
 			)}

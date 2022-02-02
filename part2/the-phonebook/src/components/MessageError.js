@@ -9,7 +9,7 @@ const messageStyle = {
 	backgroundColor: '#aaa',
 };
 
-const MessageError = ({ name, handleError }) => {
+const MessageError = ({ message, handleError }) => {
 	useEffect(() => {
 		const showTime = setTimeout(() => handleError(), 5000);
 		return () => clearTimeout(showTime);
@@ -17,9 +17,7 @@ const MessageError = ({ name, handleError }) => {
 
 	return (
 		<div style={messageStyle}>
-			<h3 style={{ padding: 0, margin: 0 }}>
-				Information of {name} has already been removed from server
-			</h3>
+			<h3 style={{ padding: 0, margin: 0 }}>{message}</h3>
 		</div>
 	);
 };
